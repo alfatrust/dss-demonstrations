@@ -2,6 +2,7 @@
 *.releaseBackup
 release.properties
 .*
+!.github/
 *.iml
 .idea
 target
