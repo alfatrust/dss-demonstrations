@@ -10,19 +10,16 @@ COPY . /home/demouser/dss-demonstrations/
 
 WORKDIR /home/demouser/dss-demonstrations
 
-# Import AlfaTrust CA certificates into the existing keystore.p12 before building the WAR
-RUN keytool -importcert -noprompt \
-    -keystore dss-demo-webapp/src/main/resources/keystore.p12 \
-    -storetype PKCS12 \
-    -storepass dss-password \
-    -alias alfasign-enterprise-root-dev \
-    -file certs/AlfaSignEnterpriseRootDEV.cacert.pem && \
-    keytool -importcert -noprompt \
-    -keystore dss-demo-webapp/src/main/resources/keystore.p12 \
-    -storetype PKCS12 \
-    -storepass dss-password \
-    -alias alfasign-enterprise-dev \
-    -file certs/AlfaSignEnterpriseDEV.cacert.pem
+# Import all certificates from certs/ into the existing keystore.p12 before building the WAR
+RUN for cert in certs/*; do \
+        alias=$(basename "$cert" | sed 's/\.[^.]*$//') ; \
+        keytool -importcert -noprompt \
+            -keystore dss-demo-webapp/src/main/resources/keystore.p12 \
+            -storetype PKCS12 \
+            -storepass dss-password \
+            -alias "$alias" \
+            -file "$cert" ; \
+    done
 
 RUN mvn package -pl dss-standalone-app,dss-standalone-app-package,dss-demo-webapp -P quick,linux
 
