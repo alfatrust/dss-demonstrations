@@ -13,6 +13,14 @@ ingress:
   class: nginx
   host: dss.alfasign.works
   prefix: /
+  maxBodySize: "250m"
+
+gateway:
+  enabled: false
+  parentRefName: ""
+  parentRefNamespace: ""
+  host: dss.alfasign.works
+  prefix: /
 
 certmanager:
   enabled: true

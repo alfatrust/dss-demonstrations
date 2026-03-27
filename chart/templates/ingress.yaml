@@ -4,6 +4,7 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.maxBodySize | quote }}
     {{- if .Values.certmanager.enabled }}
     cert-manager.io/cluster-issuer: {{ .Values.certmanager.cluster_issuer }}
     {{- end }}
